@@ -101,6 +101,13 @@ class PacMan_test(unittest.TestCase):
         self.MrPacMan.DesiredDirection = "RIGHT"
         self.MrPacMan.Move()
         self.assertEqual(self.MrPacMan.CurrentCoord, [4,4])
+        
+        self.MrPacMan.NextNode = "E"
+        self.MrPacMan.CurrentCoord = [14,4]
+        self.MrPacMan.DesiredDirection = "RIGHT"
+        self.MrPacMan.Move()
+        self.assertEqual(self.MrPacMan.DesiredDirection, "STOP")
+        self.assertEqual(self.MrPacMan.CurrentCoord, [14,4])
 
     def test_ChangeDirection(self):
 
@@ -139,6 +146,11 @@ class PacMan_test(unittest.TestCase):
         self.MrPacMan.CurrentCoord = [6,4]
         self.MrPacMan.ChangeDirection("DOWN",True)
         self.assertEqual(self.MrPacMan.CurrentCoord, [6,5])
+
+        self.MrPacMan.NextNode = "E"
+        self.MrPacMan.CurrentCoord = [14,4]
+        self.MrPacMan.ChangeDirection("RIGHT",True)
+        self.assertEqual(self.MrPacMan.DesiredDirection, "STOP")
 
 if __name__ == "__main__":
     unittest.main()

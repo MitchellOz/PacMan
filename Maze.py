@@ -1,4 +1,5 @@
 import heapq
+import math
 
 class MazeGraph:
     def __init__(self):
@@ -8,12 +9,15 @@ class MazeGraph:
         if node not in self.nodes:
             self.nodes[node] = {"coord": coord, "edges": {}}
     
-    def add_edge(self, node1, node2, weight):
+    def add_edge(self, node1, node2):
         self.add_node(node1, self.nodes[node1]["coord"] if node1 in self.nodes else None)
         self.add_node(node2, self.nodes[node2]["coord"] if node2 in self.nodes else None)
+        coord1 = self.nodes[node1]["coord"]
+        coord2 = self.nodes[node2]["coord"]
+        weight = math.sqrt((coord2[0] - coord1[0]) ** 2 + (coord2[1] - coord1[1]) ** 2)
         self.nodes[node1]["edges"][node2] = weight
         self.nodes[node2]["edges"][node1] = weight
-
+        
     def get_neighbor_nodes(self, node):
         if node in self.nodes:
             return list(self.nodes[node]["edges"].keys())
@@ -42,6 +46,40 @@ class MazeGraph:
         if node in self.nodes:
             return self.nodes[node]["coord"]
         return None
+    
+    def dijkstra(self, start, end):
+        shortest_paths = {start: (None, 0)}
+        current_node = start
+        visited_nodes = set()
+
+        while current_node != end:
+            visited_nodes.add(current_node)
+            destinations = self.nodes[current_node]['edges']
+            weight_to_current_node = shortest_paths[current_node][1]
+
+            for next_node in destinations:
+                weight = self.nodes[current_node]['edges'][next_node] + weight_to_current_node
+                if next_node not in shortest_paths:
+                    shortest_paths[next_node] = (current_node, weight)
+                else:
+                    current_shortest_weight = shortest_paths[next_node][1]
+                    if current_shortest_weight > weight:
+                        shortest_paths[next_node] = (current_node, weight)
+
+            next_destinations = {node: shortest_paths[node] for node in shortest_paths if node not in visited_nodes}
+            if not next_destinations:
+                return None
+            current_node = min(next_destinations, key=lambda k: next_destinations[k][1])
+
+        path = []
+        while current_node is not None:
+            path.append(current_node)
+            next_node = shortest_paths[current_node][0]
+            current_node = next_node
+
+        path = path[::-1]
+        return path
+
 
 # Example usage
 # graph = MazeGraph()

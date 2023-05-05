@@ -8,15 +8,19 @@ class PacMan:
         self.NextNode = NextNode
         self.PrevNode = PrevNode
         self.DesiredDirection = DesiredDirection
+        self.QueuedDirection = DesiredDirection
         self.Maze = Maze
 
     def ChangeDirection(self, NewDirection, atNode = False):
         temp = self.DesiredDirection
+        self.QueuedDirection = NewDirection
         self.DesiredDirection = NewDirection
         if(self.DirectionPossible(atNode)):
-            self.Move()
             return True
-        self.DesiredDirection = temp
+        if(atNode):
+            self.DesiredDirection = "STOP"
+        else:
+            self.DesiredDirection = temp
         return False
 
     def DirectionPossible(self, atNode):
@@ -76,17 +80,22 @@ class PacMan:
             return False
     
     def Move(self):
-        if(self.CurrentCoord == self.Maze.nodes[self.NextNode]["coord"]):
-            self.ChangeDirection(self.DesiredDirection, True)
-    
+        if(self.CurrentCoord == list(self.Maze.nodes[self.NextNode]["coord"])):
+            self.ChangeDirection(self.QueuedDirection, True)
+            return True
+
         if(self.DesiredDirection == "UP"):
-            self.CurrentCoord[1] -= 1
+            self.CurrentCoord[1] = round(self.CurrentCoord[1] - 0.2, 1)
         if(self.DesiredDirection == "DOWN"):
-            self.CurrentCoord[1] += 1
+            self.CurrentCoord[1] = round(self.CurrentCoord[1] + 0.2, 1)
         if(self.DesiredDirection == "LEFT"):
-            self.CurrentCoord[0] -= 1
+            self.CurrentCoord[0] = round(self.CurrentCoord[0] - 0.2, 1)
         if(self.DesiredDirection == "RIGHT"):
-            self.CurrentCoord[0] += 1
+            self.CurrentCoord[0] = round(self.CurrentCoord[0] + 0.2, 1)
+
+        if(self.DesiredDirection == "STOP"):
+            pass
+        return False
 
 # graph = MazeGraph()
 # graph.add_node("A", (6, 0))
