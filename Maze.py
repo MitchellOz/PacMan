@@ -1,9 +1,11 @@
 import heapq
 import math
+import numpy as np
 
 class MazeGraph:
     def __init__(self):
         self.nodes = {}
+        self.Dots = []
     
     def add_node(self, node, coord):
         if node not in self.nodes:
@@ -17,7 +19,10 @@ class MazeGraph:
         weight = math.sqrt((coord2[0] - coord1[0]) ** 2 + (coord2[1] - coord1[1]) ** 2)
         self.nodes[node1]["edges"][node2] = weight
         self.nodes[node2]["edges"][node1] = weight
-        
+
+        num_points = int(weight * 2) + 1
+        self.Dots.extend([list(np.round(np.array(coord1) + (np.array(coord2) - np.array(coord1)) * t / (num_points - 1), decimals=2)) for t in range(num_points)])
+
     def get_neighbor_nodes(self, node):
         if node in self.nodes:
             return list(self.nodes[node]["edges"].keys())

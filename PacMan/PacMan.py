@@ -85,13 +85,13 @@ class PacMan:
             return True
 
         if(self.DesiredDirection == "UP"):
-            self.CurrentCoord[1] = round(self.CurrentCoord[1] - 0.2, 1)
+            self.CurrentCoord[1] = round(self.CurrentCoord[1] - 0.02, 2)
         if(self.DesiredDirection == "DOWN"):
-            self.CurrentCoord[1] = round(self.CurrentCoord[1] + 0.2, 1)
+            self.CurrentCoord[1] = round(self.CurrentCoord[1] + 0.02, 2)
         if(self.DesiredDirection == "LEFT"):
-            self.CurrentCoord[0] = round(self.CurrentCoord[0] - 0.2, 1)
+            self.CurrentCoord[0] = round(self.CurrentCoord[0] - 0.02, 2)
         if(self.DesiredDirection == "RIGHT"):
-            self.CurrentCoord[0] = round(self.CurrentCoord[0] + 0.2, 1)
+            self.CurrentCoord[0] = round(self.CurrentCoord[0] + 0.02, 2)
 
         if(self.DesiredDirection == "STOP"):
             pass
